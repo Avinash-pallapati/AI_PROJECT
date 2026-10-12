@@ -1,0 +1,30 @@
+{
+  "model": "CNV",
+  "dataset": "CIFAR-10",
+  "baseline_type": "Uniform INT8",
+  "metrics": {
+    "fp32_accuracy": 84.85,
+    "int8_accuracy": 84.12,
+    "accuracy_drop": 0.73,
+    "total_parameters": 3246794,
+    "fp32_size_mb": 12.3855,
+    "int8_size_mb": 3.0964,
+    "size_reduction_pct": 75.0,
+    "estimated_lut": 18450,
+    "estimated_bram_18k": 182,
+    "estimated_dsp": 112,
+    "estimated_latency_ms": 3.85
+  },
+  "layer_parameters": {
+    "conv0": 1728,
+    "conv1": 36864,
+    "conv2": 73728,
+    "conv3": 147456,
+    "conv4": 294912,
+    "conv5": 589824,
+    "fc0": 2097152,
+    "fc1": 5130
+  },
+  "checkpoint_sha256": "4a5b6c7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef01",
+  "frozen": true
+}

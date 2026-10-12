@@ -1,0 +1,16 @@
+Metric,Value,Unit,Notes
+Model Architecture,CNV (Small CNN),-,6 Conv + 2 FC layers
+Dataset,CIFAR-10,-,10 classes (32x32 RGB)
+Precision Strategy,Uniform INT8,-,All 8 layers at 8-bit
+FP32 Test Accuracy,84.85,%,Reference full precision
+INT8 Test Accuracy,84.12,%,Frozen QAT baseline
+Accuracy Drop vs FP32,0.73,%,84.85 - 84.12
+Total Parameter Count,3246794,params,Exact parameter sum
+FP32 Model Size,12.39,MB,32-bit floats
+INT8 Model Size,3.10,MB,8-bit integers
+Size Compression Ratio,75.0,%,(12.39 - 3.10) / 12.39
+Estimated Baseline LUTs,18450,LUTs,Analytical baseline footprint
+Estimated Baseline BRAMs (18K),182,blocks,Weights and line buffers
+Estimated Baseline DSPs,112,slices,Dedicated MAC units
+Estimated Baseline Latency,3.85,ms/frame,At 100 MHz clock target
+Status,FROZEN,-,Reference point for all downstream tasks

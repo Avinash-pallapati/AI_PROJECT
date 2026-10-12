@@ -1,0 +1,29 @@
+# Greedy Mixed-Precision Search Configuration
+search:
+  name: "accelerator_aware_greedy_search"
+  max_iterations: 15
+  require_verified_precision: true # Only allow verified hardware precisions
+  supported_precisions: [8, 4]     # Supported on QCore-INT8 (INT8 native, INT4 sub-byte SIMD)
+  unsupported_precisions: [6, 2]   # Blocked unless verified in hardware spec
+  
+constraints:
+  max_accuracy_drop: 1.50          # Maximum allowable Top-1 accuracy drop (percentage points)
+  max_lut: 25000                   # Maximum FPGA LUT budget
+  max_bram_18k: 160                # Maximum 18Kb BRAM blocks (target: reduce from baseline 182)
+  max_dsp: 120                     # Maximum DSP slice count
+  max_ff: 50000                    # Maximum Flip-Flop count
+  max_latency_ms: 3.50             # Latency ceiling (ms/frame) (baseline is 3.85 ms)
+
+benefit:
+  metric: "normalized_hardware_benefit"
+  weights:
+    bram_reduction: 0.50           # Heavily weight BRAM reduction (on-chip memory bottleneck)
+    lut_reduction: 0.20
+    dsp_reduction: 0.20
+    latency_reduction: 0.10
+
+output:
+  history_csv: "results/search/search_history.csv"
+  final_config_json: "results/search/final_precision_config.json"
+  summary_json: "results/search/search_summary.json"
+  plots_dir: "results/search/plots"

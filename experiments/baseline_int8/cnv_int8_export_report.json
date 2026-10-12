@@ -1,0 +1,9 @@
+{
+  "export_attempted": true,
+  "brevitas_available": false,
+  "torch_available": false,
+  "success": false,
+  "reason": "Host runtime missing PyTorch / Brevitas. Export command staged in scripts/export_qonnx.py; to be executed in FINN Docker container.",
+  "target_file": "experiments/baseline_int8/cnv_int8.qonnx",
+  "status": "STAGED_FOR_FINN_CONTAINER"
+}

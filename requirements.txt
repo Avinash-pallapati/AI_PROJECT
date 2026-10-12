@@ -1,0 +1,18 @@
+# Core Machine Learning & Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Quantization & Graph Export
+brevitas>=0.10.0
+onnx>=1.14.0
+qonnx>=0.4.0
+
+# Data Processing & Analysis
+numpy>=1.23.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+pyyaml>=6.0
+scikit-learn>=1.2.0
+
+# Testing & Verification
+pytest>=7.0.0

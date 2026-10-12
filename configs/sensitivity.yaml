@@ -1,0 +1,26 @@
+# Layer Sensitivity Analysis Configuration
+experiment:
+  name: "layer_sensitivity_int8_to_int4"
+  baseline_precision: 8
+  candidate_precision: 4
+  quantized_tensors: "W+A"        # Weights + Activations
+  evaluation_mode: "inference_only" # Direct inference without retraining to isolate intrinsic sensitivity
+  
+baseline:
+  checkpoint: "experiments/baseline_int8/cnv_int8_qat.pth"
+  accuracy: 84.12                 # Frozen Uniform INT8 accuracy
+  
+eligible_layers:
+  - "conv0"
+  - "conv1"
+  - "conv2"
+  - "conv3"
+  - "conv4"
+  - "conv5"
+  - "fc0"
+  - "fc1"
+
+output:
+  results_csv: "results/sensitivity/sensitivity_results.csv"
+  ranking_json: "results/sensitivity/sensitivity_ranking.json"
+  plot_dir: "results/sensitivity/plots"

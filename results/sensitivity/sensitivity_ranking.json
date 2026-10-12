@@ -1,0 +1,90 @@
+[
+  {
+    "sensitivity_rank": 1,
+    "layer": "conv3",
+    "accuracy_drop": 0.28,
+    "accuracy": 83.84,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "LOW (Least sensitive - first priority for precision reduction)",
+    "parameter_count": 147456,
+    "notes": "Intermediate conv layer; lowest degradation under INT4"
+  },
+  {
+    "sensitivity_rank": 2,
+    "layer": "conv2",
+    "accuracy_drop": 0.31,
+    "accuracy": 83.81,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "LOW (Insensitive - prime candidate for INT4)",
+    "parameter_count": 73728,
+    "notes": "Intermediate conv layer; highly robust"
+  },
+  {
+    "sensitivity_rank": 3,
+    "layer": "conv4",
+    "accuracy_drop": 0.35,
+    "accuracy": 83.77,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "LOW (Insensitive - prime candidate for INT4)",
+    "parameter_count": 294912,
+    "notes": "Intermediate conv layer; high parameter savings"
+  },
+  {
+    "sensitivity_rank": 4,
+    "layer": "conv1",
+    "accuracy_drop": 0.42,
+    "accuracy": 83.70,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "MODERATE (Cautious reduction)",
+    "parameter_count": 36864,
+    "notes": "Early feature layer; minor degradation"
+  },
+  {
+    "sensitivity_rank": 5,
+    "layer": "fc0",
+    "accuracy_drop": 0.45,
+    "accuracy": 83.67,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "MODERATE (Prime target for memory compression)",
+    "parameter_count": 2097152,
+    "notes": "Largest layer in model (64.6% of weights); moderate drop with massive BRAM savings"
+  },
+  {
+    "sensitivity_rank": 6,
+    "layer": "conv5",
+    "accuracy_drop": 0.78,
+    "accuracy": 83.34,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "MODERATE (Cautious reduction)",
+    "parameter_count": 589824,
+    "notes": "Deep feature representation; noticeable accuracy penalty"
+  },
+  {
+    "sensitivity_rank": 7,
+    "layer": "conv0",
+    "accuracy_drop": 3.85,
+    "accuracy": 80.27,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "HIGH (Sensitive - preserve INT8)",
+    "parameter_count": 1728,
+    "notes": "Input conv layer; high error propagation to downstream features"
+  },
+  {
+    "sensitivity_rank": 8,
+    "layer": "fc1",
+    "accuracy_drop": 4.20,
+    "accuracy": 79.92,
+    "old_bits": 8,
+    "new_bits": 4,
+    "sensitivity_class": "HIGH (Most sensitive - preserve INT8)",
+    "parameter_count": 5130,
+    "notes": "Output classification layer; directly affects class logit margins"
+  }
+]

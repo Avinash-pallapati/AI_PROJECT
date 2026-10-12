@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="360" viewBox="0 0 700 360">
+  <rect width="100%" height="100%" fill="#ffffff" />
+  <text x="350.0" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#1e293b">Search Convergence: Accuracy vs BRAM Allocation</text>
+  <line x1="60" y1="60" x2="60" y2="300" stroke="#64748b" stroke-width="2" />
+  <line x1="60" y1="300" x2="640" y2="300" stroke="#64748b" stroke-width="2" />
+  
+  <!-- Y-axis guidelines -->
+  <line x1="60" y1="60" x2="640" y2="60" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4" />
+  <line x1="60" y1="120" x2="640" y2="120" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4" />
+  <line x1="60" y1="180" x2="640" y2="180" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4" />
+  <line x1="60" y1="240" x2="640" y2="240" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4" />
+
+  <!-- Labels -->
+  <text x="60" y="325" font-family="Arial, sans-serif" font-size="11" fill="#475569">Baseline (All INT8)</text>
+  <text x="205" y="325" font-family="Arial, sans-serif" font-size="11" fill="#475569">Step 1: fc0</text>
+  <text x="350" y="325" font-family="Arial, sans-serif" font-size="11" fill="#475569">Step 2: conv4</text>
+  <text x="495" y="325" font-family="Arial, sans-serif" font-size="11" fill="#475569">Step 3: conv3</text>
+  <text x="640" y="325" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#475569">Step 4: conv2 (Final)</text>
+
+  <!-- Accuracy path (Blue) -->
+  <!-- Base: 84.12%, Step1: 83.67%, Step2: 83.32%, Step3: 83.04%, Step4: 82.73% -->
+  <path d="M 60 102 L 205 124 L 350 141 L 495 154 L 640 169" fill="none" stroke="#2563eb" stroke-width="3" />
+  <circle cx="60" cy="102" r="5" fill="#2563eb" />
+  <text x="60" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2563eb">84.12%</text>
+  <circle cx="205" cy="124" r="5" fill="#2563eb" />
+  <text x="205" y="114" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2563eb">83.67%</text>
+  <circle cx="350" cy="141" r="5" fill="#2563eb" />
+  <text x="350" y="131" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2563eb">83.32%</text>
+  <circle cx="495" cy="154" r="5" fill="#2563eb" />
+  <text x="495" y="144" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2563eb">83.04%</text>
+  <circle cx="640" cy="169" r="5" fill="#2563eb" />
+  <text x="640" y="159" text-anchor="end" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2563eb">82.73%</text>
+
+  <!-- BRAM Blocks path (Green) -->
+  <!-- Base: 182, Step1: 154, Step2: 138, Step3: 128, Step4: 121 -->
+  <path d="M 60 103 L 205 170 L 350 209 L 495 233 L 640 250" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="5" />
+  <circle cx="60" cy="103" r="5" fill="#10b981" />
+  <text x="60" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#10b981">182 blk</text>
+  <circle cx="205" cy="170" r="5" fill="#10b981" />
+  <text x="205" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#10b981">154 blk</text>
+  <circle cx="350" cy="209" r="5" fill="#10b981" />
+  <text x="350" y="229" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#10b981">138 blk</text>
+  <circle cx="495" cy="233" r="5" fill="#10b981" />
+  <text x="495" y="253" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#10b981">128 blk</text>
+  <circle cx="640" cy="250" r="5" fill="#10b981" />
+  <text x="640" y="270" text-anchor="end" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#10b981">121 blk (-33.5%)</text>
+
+  <!-- Legend -->
+  <rect x="470" y="45" width="210" height="50" fill="#f8fafc" stroke="#cbd5e1" rx="4" />
+  <line x1="485" y1="60" x2="515" y2="60" stroke="#2563eb" stroke-width="3" />
+  <text x="525" y="64" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">Top-1 Accuracy (%)</text>
+  <line x1="485" y1="80" x2="515" y2="80" stroke="#10b981" stroke-width="3" stroke-dasharray="4" />
+  <text x="525" y="84" font-family="Arial, sans-serif" font-size="12" fill="#1e293b">BRAM 18K Blocks</text>
+</svg>

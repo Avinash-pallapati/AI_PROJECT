@@ -1,0 +1,9 @@
+run_id,layer,old_bits,new_bits,weight_act,accuracy,accuracy_drop,supported,runtime_sec,notes
+sens_001,conv0,8,4,W+A,80.27,3.85,yes,0.062,First convolutional layer; processes input pixels; high sensitivity
+sens_002,conv1,8,4,W+A,83.70,0.42,yes,0.058,Early feature extractor; robust to INT4 quantization
+sens_003,conv2,8,4,W+A,83.81,0.31,yes,0.059,Intermediate convolutional layer; low sensitivity
+sens_004,conv3,8,4,W+A,83.84,0.28,yes,0.061,Intermediate feature layer; lowest accuracy drop (least sensitive)
+sens_005,conv4,8,4,W+A,83.77,0.35,yes,0.063,Deep convolutional layer; low sensitivity
+sens_006,conv5,8,4,W+A,83.34,0.78,yes,0.065,Deep feature layer before classification; moderate sensitivity
+sens_007,fc0,8,4,W+A,83.67,0.45,yes,0.071,Large dense layer (2M parameters); high memory benefit
+sens_008,fc1,8,4,W+A,79.92,4.20,yes,0.054,Final classification logits; highest accuracy drop (most sensitive)

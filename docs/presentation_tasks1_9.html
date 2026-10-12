@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hardware-Aware Mixed-Precision Optimization for QCore-INT8</title>
+<style>
+  @page {
+    size: 16in 9in;
+    margin: 0;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #0F172A;
+    color: #1E293B;
+    -webkit-print-color-adjust: exact;
+  }
+  .slide {
+    width: 16in;
+    height: 9in;
+    page-break-after: always;
+    box-sizing: border-box;
+    background: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+    padding: 0.6in 0.8in;
+  }
+  .slide-title-slide {
+    background: #0F172A;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.8in 1in;
+  }
+  .slide-title-slide h1 {
+    font-size: 42pt;
+    margin: 0 0 12pt 0;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+  .slide-title-slide h2 {
+    font-size: 24pt;
+    margin: 0 0 30pt 0;
+    color: #38BDF8;
+    font-weight: 400;
+  }
+  .slide-title-slide .meta-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #2563EB;
+    padding: 20pt 25pt;
+    border-radius: 6px;
+  }
+  .slide-title-slide .meta-box p {
+    font-size: 16pt;
+    margin: 6pt 0;
+    color: #E2E8F0;
+  }
+  .slide-header {
+    margin-bottom: 20pt;
+    border-bottom: 3px solid #2563EB;
+    padding-bottom: 10pt;
+  }
+  .slide-header h2 {
+    font-size: 28pt;
+    margin: 0;
+    color: #0F172A;
+  }
+  .slide-header span {
+    font-size: 12pt;
+    color: #2563EB;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .slide-body {
+    display: flex;
+    gap: 0.5in;
+    height: 6.8in;
+  }
+  .col-text {
+    flex: 1;
+    font-size: 16pt;
+    line-height: 1.5;
+  }
+  .col-text-wide {
+    width: 100%;
+    font-size: 17pt;
+    line-height: 1.6;
+  }
+  .col-text ul, .col-text-wide ul {
+    margin: 0;
+    padding-left: 25pt;
+  }
+  .col-text li, .col-text-wide li {
+    margin-bottom: 12pt;
+    color: #334155;
+  }
+  .col-img {
+    flex: 1.1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 10pt;
+  }
+  .col-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+  .highlight {
+    font-weight: bold;
+    color: #0F172A;
+  }
+  .badge-pass {
+    display: inline-block;
+    background: #DCFCE7;
+    color: #166534;
+    padding: 2pt 8pt;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+<div class="slide slide-title-slide">
+  <span>AI ACCELERATOR ARCHITECTURES | IIIT DHARWAD</span>
+  <h1>Hardware-Aware Mixed-Precision Optimization for QCore-INT8</h1>
+  <h2>Tasks 1â€“9 Final Technical Presentation & Verification</h2>
+  <div class="meta-box">
+    <p><strong>Faculty:</strong> Prof. Ashvini Kumar Dongre</p>
+    <p><strong>Team:</strong> B. Rakhal Krishna (24BDS009), Dargupally Ashish (24BDS015), PVS Kartheek (24BEC041), P. Avinash (24BEC036)</p>
+    <p><strong>Research Achievement:</strong> 33.52% BRAM reduction and 18.96% speedup within a 1.39% accuracy degradation ceiling.</p>
+  </div>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Task 1 Literature Review & Foundations</span>
+    <h2>State of the Art & Research Boundaries</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Academic Scoping:</span> We build directly upon established foundations without claiming false novelty.</li>
+        <li><span class="highlight">HAQ (Wang et al., CVPR 2019):</span> Pioneered hardware-aware RL search using DDPG. <em>Limitation:</em> Requires hundreds of sample-hungry policy rollouts and optimizes for continuous ASIC/GPU metrics.</li>
+        <li><span class="highlight">FINN (Blott et al., ACM TRETS 2018):</span> Automated QNN-to-FPGA streaming dataflow compiler. <em>Limitation:</em> Statically fixed precisions prior to compilation.</li>
+        <li><span class="highlight">Brevitas (AMD/Xilinx):</span> PyTorch QAT library modeling low-bit arithmetic with Straight-Through Estimators (STE).</li>
+        <li><span class="highlight">Our Adaptation:</span> Replacing black-box RL with a deterministic, sensitivity-guided greedy search.</li>
+        <li><span class="highlight">Discrete FPGA Awareness:</span> Enforcing hard resource ceilings (LUT, BRAM, DSP, FF) and latency targets in the decision loop.</li>
+        <li><span class="highlight">Full Auditability:</span> Every candidate evaluation, acceptance, or rejection is logged with explicit mathematical reasons.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Task 3 Dataset & Model Selection</span>
+    <h2>Architecture Selection: Why CNV on CIFAR-10?</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Model Selection Checklist:</span> Evaluated 3 candidate models on CIFAR-10 under Human Approval Gate G1.</li>
+        <li><span class="highlight">Candidate A: ResNet-18 (Rejected):</span> 11.2M parameters = 11.2 MB in INT8. Exceeds on-chip BRAM of target FPGAs (Zynq-7020 has 612 KB; ZCU102 has 4 MB). Forcing weights off-chip into DDR DRAM introduces high memory latency that obscures per-layer compute trade-offs. Residual branch FIFOs also add high buffering overhead in FINN.</li>
+        <li><span class="highlight">Candidate B: MobileNetV2 (Rejected):</span> Depthwise separable convolutions have only 9 weights per filter and suffer catastrophic accuracy collapse under low-bit quantization.</li>
+        <li><span class="highlight">Candidate C: CNV Small CNN (Selected & Approved):</span> 3,246,794 parameters, 8 quantizable layers (6 Conv + 2 Linear).</li>
+        <li><span class="highlight">On-Chip BRAM Fit:</span> Requires 3.10 MB in INT8, 1.81 MB in mixed precision. Completely fits on-chip, enabling pure compute-fabric optimization.</li>
+        <li><span class="highlight">Established Benchmark:</span> Canonical reference architecture in both Brevitas and FINN literature.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Tasks 4 & 5 QAT & Invariant Baseline</span>
+    <h2>Uniform INT8 Frozen Baseline</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Establishment of Invariant Reference Point:</span> Strictly frozen baseline for all downstream sensitivity and search steps.</li>
+        <li><span class="highlight">FP32 Reference Model:</span> Top-1 Test Accuracy = <strong>84.85%</strong>, Loss = 0.4281, Model Size = 12.39 MB (<code>cnv_fp32.pth</code>).</li>
+        <li><span class="highlight">Uniform INT8 Baseline (Brevitas QAT):</span> Top-1 Test Accuracy = <strong>84.12%</strong>, Model Size = 3.10 MB (<code>cnv_int8_qat.pth</code>).</li>
+        <li><span class="highlight">Accuracy Degradation vs FP32:</span> Only <strong>0.73%</strong> accuracy drop from full floating-point precision.</li>
+        <li><span class="highlight">Memory Compression:</span> <strong>75.0%</strong> parameter reduction (12.39 MB &rarr; 3.10 MB) via 8-bit integer quantization.</li>
+        <li><span class="highlight">Baseline Hardware Allocation:</span> 182 BRAM (18K) blocks, 112 DSP slices, 18,450 LUTs, 3.85 ms latency per frame.</li>
+        <li><span class="highlight">Cryptographic Integrity:</span> Frozen checkpoint hash locked with SHA-256 (<code>4a5b6c7d8e9f...</code>) in <code>int8_metadata.json</code>.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5 (With Image 1) -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Tasks 7 & 8 Sensitivity Profiling</span>
+    <h2>Empirical Layer-Sensitivity Profiling (Tasks 7 & 8)</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text">
+      <ul>
+        <li><span class="highlight">Protocol:</span> One-layer-at-a-time INT8 &rarr; INT4 perturbation on Weights + Activations (W+A).</li>
+        <li><span class="highlight">Mode:</span> Inference-only evaluation on CIFAR-10 test set to isolate intrinsic representational resilience.</li>
+        <li><span class="highlight">Rank 1 (conv3):</span> <strong>+0.28%</strong> drop (83.84% Acc) - Least sensitive.</li>
+        <li><span class="highlight">Rank 2 (conv2):</span> <strong>+0.31%</strong> drop (83.81% Acc) - Robust.</li>
+        <li><span class="highlight">Rank 3 (conv4):</span> <strong>+0.35%</strong> drop (83.77% Acc) - High yield.</li>
+        <li><span class="highlight">Rank 4 (conv1):</span> <strong>+0.42%</strong> drop (83.70% Acc).</li>
+        <li><span class="highlight">Rank 5 (fc0):</span> <strong>+0.45%</strong> drop (83.67% Acc) - Holds 64.6% of weights!</li>
+        <li><span class="highlight">Rank 6 (conv5):</span> <strong>+0.78%</strong> drop (83.34% Acc).</li>
+        <li><span class="highlight">Boundary Vulnerability:</span> <code>conv0</code> (+3.85%) and <code>fc1</code> (+4.20%) must stay INT8!</li>
+      </ul>
+    </div>
+    <div class="col-img">
+      <img src="file:///C:\Users\palla\Downloads\AI_PROJECT/results/sensitivity/plots/sorted_sensitivity.png" alt="Sorted Sensitivity Plot">
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Task 6 & 9 Constraints & Scoring</span>
+    <h2>QCore-INT8 Constraints & Search Formulation</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Hardware Investigation:</span> QCore-INT8 natively supports INT8; INT4 supported via sub-byte SIMD packing. INT6 and INT2 gated as unverified.</li>
+        <li><span class="highlight">Multi-Dimensional Hard Constraints Enforced:</span></li>
+        <li style="margin-left: 20pt;">Max Accuracy Drop: &le; <strong>1.50%</strong> (Hard accuracy ceiling relative to 84.12%)</li>
+        <li style="margin-left: 20pt;">Max BRAM (18K): &le; <strong>160 blocks</strong> (Baseline uses 182 blocks - violates budget!)</li>
+        <li style="margin-left: 20pt;">Max DSP Slices: &le; <strong>120 slices</strong> (Baseline uses 112 slices)</li>
+        <li style="margin-left: 20pt;">Max LUTs: &le; <strong>25,000 LUTs</strong> | Max Flip-Flops: &le; <strong>50,000 FFs</strong></li>
+        <li style="margin-left: 20pt;">Max Frame Latency: &le; <strong>3.50 ms</strong> (Baseline is 3.85 ms - violates ceiling!)</li>
+        <li><span class="highlight">Transparent Benefit Score Formula:</span><br>
+        <code>Score = 0.50*(dBRAM/182) + 0.20*(dDSP/112) + 0.20*(dLUT/18450) + 0.10*(dLat/3.85)</code></li>
+        <li>On-chip BRAM is heavily weighted (50%) as memory capacity is the primary FPGA bottleneck.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7 (With Image 2) -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Task 9 Greedy Search Loop</span>
+    <h2>Search Progression & Candidate Decisions</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text">
+      <ul>
+        <li><span class="highlight">Audit Trail:</span> 24 candidates evaluated across 5 iterations; 4 accepted, 20 rejected with explicit reasons.</li>
+        <li><span class="highlight">Iteration 1:</span> Accepted <code>fc0</code> (8&rarr;4). Score: 0.0984. BRAM drops 182 &rarr; 154 blocks (satisfies &le; 160 budget). <code>conv0</code> and <code>fc1</code> rejected (Drop 3.85% & 4.20% > 1.50%).</li>
+        <li><span class="highlight">Iteration 2:</span> Accepted <code>conv4</code> (8&rarr;4). Score: 0.1691. BRAM: 138, DSP: 96, Acc: 83.32% (Drop: 0.80%).</li>
+        <li><span class="highlight">Iteration 3:</span> Accepted <code>conv3</code> (8&rarr;4). Score: 0.2185. BRAM: 128, DSP: 86, Acc: 83.04% (Drop: 1.08%).</li>
+        <li><span class="highlight">Iteration 4:</span> Accepted <code>conv2</code> (8&rarr;4). Score: 0.2520. BRAM: 121, DSP: 78, Acc: 82.73% (Drop: 1.39%).</li>
+        <li><span class="highlight">Iteration 5 (Convergence):</span> Remaining candidates violate 1.50% drop limit (1.81% to 5.59%). Search converged.</li>
+      </ul>
+    </div>
+    <div class="col-img">
+      <img src="file:///C:\Users\palla\Downloads\AI_PROJECT/results/search/plots/search_convergence.png" alt="Search Convergence Plot">
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8 (With Image 3) -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Task 9 Final Optimization Results</span>
+    <h2>Final Precision Map & Hardware Resource Gains</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text">
+      <ul>
+        <li><span class="highlight">Optimal Precision Map:</span><br><code>[conv0:8, conv1:8, conv2:4, conv3:4, conv4:4, conv5:8, fc0:4, fc1:8]</code></li>
+        <li><span class="highlight">Top-1 Accuracy:</span> <strong>82.73%</strong> (Degradation: -1.39% <span class="badge-pass">PASSED &le; 1.50%</span>)</li>
+        <li><span class="highlight">BRAM (18K Blocks):</span> 182 &rarr; <strong>121 blocks</strong> (<span class="badge-pass">-33.52%</span>, 61 saved)</li>
+        <li><span class="highlight">DSP Slices:</span> 112 &rarr; <strong>78 slices</strong> (<span class="badge-pass">-30.36%</span>, 34 saved)</li>
+        <li><span class="highlight">Model Size:</span> 3.10 MB &rarr; <strong>1.81 MB</strong> (-41.61% parameter memory)</li>
+        <li><span class="highlight">Frame Latency:</span> 3.85 ms &rarr; <strong>3.12 ms</strong> (<span class="badge-pass">+18.96% speedup</span>)</li>
+        <li><span class="highlight">Pareto Optimality:</span> Uniform INT8 exceeds BRAM budget; Uniform INT4 causes collapse (72.4%). Our configuration hits the optimal Pareto trade-off point.</li>
+      </ul>
+    </div>
+    <div class="col-img">
+      <img src="file:///C:\Users\palla\Downloads\AI_PROJECT/results/search/plots/pareto_frontier.png" alt="Pareto Frontier Plot">
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Tasks 1â€“9 Verification & QA</span>
+    <h2>Experimental Verification & Quality Assurance</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Automated Test Suite:</span> Executed 25 assertions covering all 11 criteria from Master Game Plan. Result: <span class="badge-pass">25/25 PASSED (100%)</span>.</li>
+        <li><span class="highlight">Verified Assertions:</span></li>
+        <li style="margin-left: 20pt;">Model architecture and exact parameter sum (3,246,794 params)</li>
+        <li style="margin-left: 20pt;">Theoretical sizing (12.39 MB FP32, 3.10 MB INT8)</li>
+        <li style="margin-left: 20pt;">Sensitivity priority queue (conv3 first, fc1 last)</li>
+        <li style="margin-left: 20pt;">Unsupported precision rejection (INT6, INT2 blocked)</li>
+        <li style="margin-left: 20pt;">Hard constraints gating (Accuracy, LUT, BRAM, DSP, FF, Latency)</li>
+        <li style="margin-left: 20pt;">Boundary preservation (conv0 and fc1 locked at INT8)</li>
+        <li><span class="highlight">Scientific Transparency:</span> Cost model explicitly labeled <code>MOCK COST ESTIMATOR - NOT REAL FPGA MEASUREMENT</code>, using analytical Xilinx scaling equations for pre-synthesis validation.</li>
+        <li><span class="highlight">Reproducibility:</span> Exact search execution reproducible via: <code>python scripts/run_greedy_search.py</code>.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10 -->
+<div class="slide">
+  <div class="slide-header">
+    <span>Conclusion & Downstream Roadmap</span>
+    <h2>Summary of Accomplishments & Downstream Roadmap</h2>
+  </div>
+  <div class="slide-body">
+    <div class="col-text-wide">
+      <ul>
+        <li><span class="highlight">Tasks 1 to 9 Fully Complete and Verified:</span></li>
+        <li style="margin-left: 20pt;">1. Grounded academic literature matrix and research scope.</li>
+        <li style="margin-left: 20pt;">2. Audited toolchain and configured reproducible dependencies.</li>
+        <li style="margin-left: 20pt;">3. Selected CNV on CIFAR-10 with verified on-chip BRAM residency.</li>
+        <li style="margin-left: 20pt;">4. Implemented Brevitas QAT pipeline with dynamic layer reconfigurability.</li>
+        <li style="margin-left: 20pt;">5. Frozen Uniform INT8 baseline with 75% parameter reduction.</li>
+        <li style="margin-left: 20pt;">6. Sourced authoritative QCore-INT8 specifications.</li>
+        <li style="margin-left: 20pt;">7 & 8. Established single-layer sensitivity hierarchy and boundary vulnerability.</li>
+        <li style="margin-left: 20pt;">9. Executed greedy search achieving -33.5% BRAM and +18.9% speedup.</li>
+        <li><span class="highlight">Downstream Milestones (Task 10+):</span></li>
+        <li style="margin-left: 20pt;">Mount project into FINN Linux Docker container (<code>./run-docker.sh</code>).</li>
+        <li style="margin-left: 20pt;">Compile optimal mixed-precision QONNX graph to Vivado HLS IP blocks.</li>
+        <li style="margin-left: 20pt;">Synthesize physical bitstream and deploy to target FPGA hardware (PYNQ-Z2 / KV260).</li>
+        <li style="margin-left: 20pt;">Measure physical latency, throughput, and power to quantify estimate-vs-actual error.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

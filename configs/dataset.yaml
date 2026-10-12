@@ -1,0 +1,19 @@
+# Dataset Configuration: CIFAR-10
+dataset:
+  name: "CIFAR-10"
+  num_classes: 10
+  input_shape: [3, 32, 32]
+  mean: [0.4914, 0.4822, 0.4465]
+  std: [0.2470, 0.2435, 0.2616]
+  
+dataloader:
+  batch_size: 128
+  test_batch_size: 256
+  num_workers: 2
+  pin_memory: true
+  
+split:
+  train_split: 45000
+  val_split: 5000
+  test_split: 10000
+  random_seed: 42

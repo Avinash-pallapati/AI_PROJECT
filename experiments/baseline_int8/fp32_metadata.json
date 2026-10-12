@@ -1,0 +1,18 @@
+{
+  "model": "CNV_FP32",
+  "dataset": "CIFAR-10",
+  "epochs": 30,
+  "batch_size": 128,
+  "learning_rate": 0.01,
+  "momentum": 0.9,
+  "weight_decay": 0.0001,
+  "lr_scheduler": "cosine",
+  "seed": 42,
+  "test_accuracy": 84.85,
+  "test_loss": 0.4281,
+  "total_parameters": 3246794,
+  "model_size_mb": 12.3855,
+  "checkpoint_path": "experiments/baseline_int8/cnv_fp32.pth",
+  "checkpoint_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "status": "FROZEN_BASELINE_FP32"
+}

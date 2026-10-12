@@ -1,0 +1,70 @@
+# Model Configuration: CNV Small CNN for CIFAR-10
+model:
+  name: "CNV"
+  family: "Small_CNN"
+  num_classes: 10
+  in_channels: 3
+  
+  # Layer architecture definition
+  layers:
+    - name: "conv0"
+      type: "Conv2d"
+      in_channels: 3
+      out_channels: 64
+      kernel_size: 3
+      padding: 1
+      bias: false
+    - name: "conv1"
+      type: "Conv2d"
+      in_channels: 64
+      out_channels: 64
+      kernel_size: 3
+      padding: 1
+      bias: false
+      pool: 2
+    - name: "conv2"
+      type: "Conv2d"
+      in_channels: 64
+      out_channels: 128
+      kernel_size: 3
+      padding: 1
+      bias: false
+    - name: "conv3"
+      type: "Conv2d"
+      in_channels: 128
+      out_channels: 128
+      kernel_size: 3
+      padding: 1
+      bias: false
+      pool: 2
+    - name: "conv4"
+      type: "Conv2d"
+      in_channels: 128
+      out_channels: 256
+      kernel_size: 3
+      padding: 1
+      bias: false
+    - name: "conv5"
+      type: "Conv2d"
+      in_channels: 256
+      out_channels: 256
+      kernel_size: 3
+      padding: 1
+      bias: false
+    - name: "fc0"
+      type: "Linear"
+      in_features: 4096   # 256 * 4 * 4 after pooling
+      out_features: 512
+      bias: false
+    - name: "fc1"
+      type: "Linear"
+      in_features: 512
+      out_features: 10
+      bias: true
+
+training:
+  epochs: 30
+  learning_rate: 0.01
+  momentum: 0.9
+  weight_decay: 0.0001
+  lr_scheduler: "cosine"

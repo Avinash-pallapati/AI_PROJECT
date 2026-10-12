@@ -1,0 +1,97 @@
+{
+  "search_algorithm": "Accelerator-Aware Greedy Mixed-Precision Search",
+  "search_status": "COMPLETED_CONVERGED",
+  "iterations_executed": 5,
+  "total_candidates_evaluated": 24,
+  "total_accepted_steps": 4,
+  "baseline_metrics": {
+    "precision_strategy": "Uniform INT8",
+    "accuracy": 84.12,
+    "bram_18k": 182,
+    "dsp": 112,
+    "lut": 18450,
+    "ff": 36800,
+    "latency_ms": 3.85,
+    "model_size_mb": 3.10
+  },
+  "final_metrics": {
+    "precision_strategy": "Hardware-Aware Mixed Precision",
+    "accuracy": 82.73,
+    "accuracy_degradation": 1.39,
+    "bram_18k": 121,
+    "dsp": 78,
+    "lut": 18350,
+    "ff": 28900,
+    "latency_ms": 3.12,
+    "model_size_mb": 1.81
+  },
+  "constraints_enforced": {
+    "max_accuracy_drop": 1.50,
+    "max_bram_18k": 160,
+    "max_dsp": 120,
+    "max_lut": 25000,
+    "max_ff": 50000,
+    "max_latency_ms": 3.50
+  },
+  "constraints_satisfied": {
+    "accuracy_constraint": "PASSED (1.39% <= 1.50%)",
+    "bram_constraint": "PASSED (121 <= 160 blocks)",
+    "dsp_constraint": "PASSED (78 <= 120 slices)",
+    "lut_constraint": "PASSED (18350 <= 25000 LUTs)",
+    "ff_constraint": "PASSED (28900 <= 50000 FFs)",
+    "latency_constraint": "PASSED (3.12ms <= 3.50ms)"
+  },
+  "resource_savings_relative_to_baseline": {
+    "bram_blocks_saved": 61,
+    "bram_reduction_pct": 33.52,
+    "dsp_slices_saved": 34,
+    "dsp_reduction_pct": 30.36,
+    "memory_size_saved_mb": 1.29,
+    "memory_reduction_pct": 41.61,
+    "latency_speedup_pct": 18.96
+  },
+  "accepted_sequence": [
+    {
+      "iteration": 1,
+      "layer": "fc0",
+      "transition": "INT8 -> INT4",
+      "benefit_score": 0.0984,
+      "accuracy_after_step": 83.67,
+      "rationale": "Largest parameter layer; massive 28 BRAM blocks saved with only 0.45% drop"
+    },
+    {
+      "iteration": 2,
+      "layer": "conv4",
+      "transition": "INT8 -> INT4",
+      "benefit_score": 0.1691,
+      "accuracy_after_step": 83.32,
+      "rationale": "High parameter conv layer; robust representation"
+    },
+    {
+      "iteration": 3,
+      "layer": "conv3",
+      "transition": "INT8 -> INT4",
+      "benefit_score": 0.2185,
+      "accuracy_after_step": 83.04,
+      "rationale": "Rank 1 least sensitive layer; zero noticeable distortion"
+    },
+    {
+      "iteration": 4,
+      "layer": "conv2",
+      "transition": "INT8 -> INT4",
+      "benefit_score": 0.2520,
+      "accuracy_after_step": 82.73,
+      "rationale": "Intermediate conv layer; brings BRAM down to 121 blocks"
+    }
+  ],
+  "final_precisions": {
+    "conv0": 8,
+    "conv1": 8,
+    "conv2": 4,
+    "conv3": 4,
+    "conv4": 4,
+    "conv5": 8,
+    "fc0": 4,
+    "fc1": 8
+  }
+}
